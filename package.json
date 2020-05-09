@@ -16,7 +16,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "tslint -c tslint.json src/**/*.{ts,tsx} --format verbose",
-    "lint:fix": "tslint -c tslint.json src/**/*.{ts,tsx} --fix --format verbose"
+    "lint:fix": "tslint -c tslint.json src/**/*.{ts,tsx} --fix --format verbose",
+    "cm": "git-cz"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -38,7 +39,10 @@
     "@types/node": "^12.12.38",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.7",
+    "commitizen": "^4.1.2",
+    "cz-conventional-changelog": "^3.2.0",
     "husky": "^4.2.5",
+    "lint-staged": "^10.2.2",
     "prettier": "2.0.5",
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
@@ -51,7 +55,15 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "lint-staged"
     }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,md}": "prettier --write"
   }
 }
