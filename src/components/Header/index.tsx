@@ -1,5 +1,5 @@
-import React from 'react';
+import React from 'react'
 
-const Header = () => (<h2>Q and A</h2>);
+const Header = () => <h2>Q and A</h2>
 
-export default Header;
+export default Header
