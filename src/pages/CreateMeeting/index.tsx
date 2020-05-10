@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import TitleInput from '../../components/Inputs/TitleInput'
+import TextInput from '../../components/Inputs/TextInput'
 import NumberInput from '../../components/Inputs/NumberInput'
-import DateInput from '../../components/Inputs/DateTimeInput'
+import DateTimeInput from '../../components/Inputs/DateTimeInput'
+import { withLogic } from '../../utilities/with-logic'
 
-type QnAMeetingData = {
+type Meeting = {
   title: string
   maxCandidateQuestionCount: number
   winnerCount: number
@@ -13,7 +14,30 @@ type QnAMeetingData = {
   plannedAnswerDate: Date
 }
 
-const CreateQnAMeeting = () => {
+type SaveProps = {
+  loading: boolean
+  onSave(data: Meeting): void
+}
+
+type Props = SaveProps
+
+const SaveLogic = (): SaveProps => {
+  const [loading, setLoading] = useState(false)
+
+  const onSave: SaveProps['onSave'] = async (data) => {
+    console.log('on save data:', data)
+    setLoading(true)
+    // TODO: call the meeting service
+    setLoading(false)
+  }
+
+  return {
+    loading,
+    onSave,
+  }
+}
+
+const CreateMeeting = ({ loading, onSave }: Props) => {
   const [title, setTitle] = useState('')
   const [maxCandidateQuestionCount, setMaxCandidateQuestionCount] = useState(0)
   const [winnerCount, setWinnerCount] = useState(0)
@@ -21,7 +45,6 @@ const CreateQnAMeeting = () => {
   const [maxCandidateQuestionPerUserCount, setMaxCandidateQuestionPerUserCount] = useState(0)
   const [electionEndDate, setElectionEndDate] = useState(new Date())
   const [plannedAnswerDate, setPlannedAnswerDate] = useState(new Date())
-  const [loading, setLoading] = useState(false)
 
   const reset = () => {
     setTitle('')
@@ -33,17 +56,10 @@ const CreateQnAMeeting = () => {
     setPlannedAnswerDate(new Date())
   }
 
-  const onSave = async (data: QnAMeetingData) => {
-    console.log('on save data:', data)
-    setLoading(true)
-    // TODO: call the meeting service
-    setLoading(false)
-  }
-
   return (
     <div>
-      <div>
-        <TitleInput value={title} onChange={setTitle} />
+      <div className="create-meeting__inputs">
+        <TextInput value={title} label="Type your title" onChange={setTitle} />
         <NumberInput
           value={maxCandidateQuestionCount}
           label="Maximum number of candidate questions"
@@ -64,12 +80,12 @@ const CreateQnAMeeting = () => {
           label="Maximum number of questions a user can send"
           onChange={setMaxCandidateQuestionPerUserCount}
         />
-        <DateInput
+        <DateTimeInput
           value={electionEndDate}
           label="End date of the question submissions"
           onChange={setElectionEndDate}
         />
-        <DateInput
+        <DateTimeInput
           value={plannedAnswerDate}
           label="When you will answer the questions"
           onChange={setPlannedAnswerDate}
@@ -100,4 +116,4 @@ const CreateQnAMeeting = () => {
   )
 }
 
-export default CreateQnAMeeting
+export default withLogic([SaveLogic], CreateMeeting)

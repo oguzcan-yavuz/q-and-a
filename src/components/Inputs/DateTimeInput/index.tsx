@@ -1,5 +1,5 @@
 import React from 'react'
-import { appendTwoDotsAndSpace, toISOStringWithoutTimezone } from '../../../utilities'
+import { appendTwoDotsAndSpace, toLocalISOTime } from '../../../utilities'
 
 type Props = {
   value: Date
@@ -12,9 +12,8 @@ const DateTimeInput = ({ value, label, onChange }: Props) => (
     <label>
       {appendTwoDotsAndSpace(label)}
       <input
-        data-testid="datetime"
         type="datetime-local"
-        value={toISOStringWithoutTimezone(value)}
+        value={toLocalISOTime(value)}
         onChange={(e) => onChange(new Date(e.target.value))}
       />
     </label>

@@ -12,10 +12,10 @@ const NumberInput = ({ value, label, onChange }: Props) => (
     <label>
       {appendTwoDotsAndSpace(label)}
       <input
-        data-testid="number"
         type="number"
         value={value.toString()}
         onChange={(e) => onChange(parseInt(e.target.value, 10))}
+        min="0"
       />
     </label>
   </div>
