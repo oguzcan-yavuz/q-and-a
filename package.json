@@ -18,7 +18,7 @@
     "eject": "react-scripts eject",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}' --format verbose",
     "lint:fix": "tslint -c tslint.json 'src/**/*.{ts,tsx}' --fix --format verbose",
-    "cm": "git-cz"
+    "cz": "git-cz"
   },
   "eslintConfig": {
     "extends": "react-app"
