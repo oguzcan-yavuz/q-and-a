@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { appendTwoDotsAndSpace, toLocalISOTime } from '../../../utilities'
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
   onChange(date: Date): void
 }
 
-const DateTimeInput = ({ value, label, onChange }: Props) => (
+const DateTimeInput: FC<Props> = ({ value, label, onChange }) => (
   <div>
     <label>
       {appendTwoDotsAndSpace(label)}

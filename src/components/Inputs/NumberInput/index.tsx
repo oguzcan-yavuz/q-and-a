@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { appendTwoDotsAndSpace } from '../../../utilities'
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
   onChange(n: number): void
 }
 
-const NumberInput = ({ value, label, onChange }: Props) => (
+const NumberInput: FC<Props> = ({ value, label, onChange }) => (
   <div>
     <label>
       {appendTwoDotsAndSpace(label)}

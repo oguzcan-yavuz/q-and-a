@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { appendTwoDotsAndSpace } from '../../../utilities'
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
   onChange(text: string): void
 }
 
-const TextInput = ({ value, label, onChange }: Props) => (
+const TextInput: FC<Props> = ({ value, label, onChange }) => (
   <div>
     <label>
       {appendTwoDotsAndSpace(label)}

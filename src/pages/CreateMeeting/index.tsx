@@ -1,18 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, FC } from 'react'
 import TextInput from '../../components/Inputs/TextInput'
 import NumberInput from '../../components/Inputs/NumberInput'
 import DateTimeInput from '../../components/Inputs/DateTimeInput'
 import { withLogic } from '../../utilities/with-logic'
-
-type Meeting = {
-  title: string
-  maxCandidateQuestionCount: number
-  winnerCount: number
-  maxVotePerUserCount: number
-  maxCandidateQuestionPerUserCount: number
-  electionEndDate: Date
-  plannedAnswerDate: Date
-}
+import { Meeting } from '../../types'
 
 type SaveProps = {
   loading: boolean
@@ -37,7 +28,7 @@ const SaveLogic = (): SaveProps => {
   }
 }
 
-const CreateMeeting = ({ loading, onSave }: Props) => {
+const CreateMeeting: FC<Props> = ({ loading, onSave }) => {
   const [title, setTitle] = useState('')
   const [maxCandidateQuestionCount, setMaxCandidateQuestionCount] = useState(0)
   const [winnerCount, setWinnerCount] = useState(0)

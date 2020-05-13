@@ -1,6 +1,5 @@
 import React, { ComponentProps } from 'react'
 import { fireEvent, render } from '@testing-library/react'
-import { wait } from '@testing-library/dom'
 import { advanceTo, clear } from 'jest-date-mock'
 import CreateMeeting from './index'
 import { toLocalISOTime } from '../../utilities'
@@ -15,7 +14,7 @@ describe('<CreateMeeting />', () => {
 
     fireEvent.change(title!, { target: { value: 'some title' } })
 
-    await wait(() => expect(title!.value).toBe('some title'))
+    expect(title!.value).toBe('some title')
   })
 
   it('should change maxCandidateQuestionCount', async () => {
@@ -24,7 +23,7 @@ describe('<CreateMeeting />', () => {
 
     fireEvent.change(maxCandidateQuestionCount!, { target: { value: '3' } })
 
-    await wait(() => expect(maxCandidateQuestionCount!.value).toBe('3'))
+    expect(maxCandidateQuestionCount!.value).toBe('3')
   })
 
   it('should change winnerCount', async () => {
@@ -33,7 +32,7 @@ describe('<CreateMeeting />', () => {
 
     fireEvent.change(winnerCount!, { target: { value: '1' } })
 
-    await wait(() => expect(winnerCount!.value).toBe('1'))
+    expect(winnerCount!.value).toBe('1')
   })
 
   it('should change maxVotePerUserCount', async () => {
@@ -42,7 +41,7 @@ describe('<CreateMeeting />', () => {
 
     fireEvent.change(maxVotePerUserCount!, { target: { value: '2' } })
 
-    await wait(() => expect(maxVotePerUserCount!.value).toBe('2'))
+    expect(maxVotePerUserCount!.value).toBe('2')
   })
 
   it('should change maxCandidateQuestionPerUserCount', async () => {
@@ -53,7 +52,7 @@ describe('<CreateMeeting />', () => {
 
     fireEvent.change(maxCandidateQuestionPerUserCount!, { target: { value: '7' } })
 
-    await wait(() => expect(maxCandidateQuestionPerUserCount!.value).toBe('7'))
+    expect(maxCandidateQuestionPerUserCount!.value).toBe('7')
   })
 
   it('should change electionEndDate', async () => {
@@ -63,7 +62,7 @@ describe('<CreateMeeting />', () => {
 
     fireEvent.change(electionEndDate!, { target: { value: localDate } })
 
-    await wait(() => expect(electionEndDate!.value).toBe(localDate))
+    expect(electionEndDate!.value).toBe(localDate)
   })
 
   it('should change plannedAnswerDate', async () => {
@@ -73,7 +72,7 @@ describe('<CreateMeeting />', () => {
 
     fireEvent.change(plannedAnswerDate!, { target: { value: localDate } })
 
-    await wait(() => expect(plannedAnswerDate!.value).toBe(localDate))
+    expect(plannedAnswerDate!.value).toBe(localDate)
   })
 
   it('should reset', () => {
