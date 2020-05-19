@@ -17,7 +17,8 @@ We are using [git-flow](https://github.com/nvie/gitflow/wiki/Command-Line-Argume
 
 2. Add your changes.
 3. Commit with `npm run cz`.
-4. Squash and merge your branch with rebasing.
+4. Push your branch to the remote.
+5. Squash and merge your branch with rebasing.
    ```sh
    git flow feature finish -r -S
    ```
