@@ -3,9 +3,10 @@ import { fireEvent, render } from '@testing-library/react'
 import { advanceTo, clear } from 'jest-date-mock'
 import CreateMeeting from './index'
 import { toLocalISOTime } from '../../utilities'
+import { MemoryRouter } from 'react-router-dom'
 
 const renderComponent = (props: Partial<ComponentProps<typeof CreateMeeting>>) =>
-  render(<CreateMeeting {...(props as any)} />)
+  render(<CreateMeeting {...(props as any)} />, { wrapper: MemoryRouter })
 
 describe('<CreateMeeting />', () => {
   it('should change title', async () => {

@@ -1,5 +1,5 @@
 import React, { ComponentProps } from 'react'
-import { render, waitFor, act } from '@testing-library/react'
+import { render, waitFor } from '@testing-library/react'
 import GetMeeting from './index'
 import { Meeting } from '../../types'
 
@@ -32,10 +32,13 @@ describe('<GetMeeting />', () => {
 
   it('should show the meeting', async () => {
     const getMeetingSpy = jest.fn().mockResolvedValue(mockMeeting)
-    const { getByText } = renderComponent({ id: '', getMeeting: getMeetingSpy })
+    const { getByText } = renderComponent({
+      id: 'bacdac16-c705-459e-9132-1a648971a84b',
+      getMeeting: getMeetingSpy,
+    })
 
     expect(getMeetingSpy).toHaveBeenCalledTimes(1)
-    expect(getMeetingSpy).toHaveBeenCalledWith('')
+    expect(getMeetingSpy).toHaveBeenCalledWith('bacdac16-c705-459e-9132-1a648971a84b')
     await waitFor(() => expect(getByText(/example/i).innerHTML).toBe(mockMeeting.title))
   })
 })

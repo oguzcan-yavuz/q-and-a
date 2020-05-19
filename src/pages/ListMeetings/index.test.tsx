@@ -2,9 +2,10 @@ import React, { ComponentProps } from 'react'
 import { render, waitFor } from '@testing-library/react'
 import ListMeetings from './index'
 import { Meeting } from '../../types'
+import { MemoryRouter } from 'react-router-dom'
 
 const renderComponent = (props: Partial<ComponentProps<typeof ListMeetings>>) =>
-  render(<ListMeetings {...(props as any)} />)
+  render(<ListMeetings {...(props as any)} />, { wrapper: MemoryRouter })
 
 const mockMeetings: Meeting[] = [
   {

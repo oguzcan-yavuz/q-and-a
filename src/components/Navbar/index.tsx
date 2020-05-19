@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Link, Switch, Route, RouteComponentProps } from 'react-router-dom'
 import ListMeetings from '../../pages/ListMeetings'
 import CreateMeeting from '../../pages/CreateMeeting'
 import GetMeeting from '../../pages/GetMeeting'
@@ -25,7 +25,13 @@ const Navbar: FC = () => (
       <Switch>
         <Route exact={true} path={['/', '/meetings']} component={ListMeetings} />
         <Route exact={true} path="/meetings/new" component={CreateMeeting} />
-        <Route exact={false} path="/meetings/:id" component={GetMeeting} />
+        <Route
+          exact={false}
+          path="/meetings/:id"
+          component={(props: RouteComponentProps<{ id: string }>) => (
+            <GetMeeting id={props.match.params.id} />
+          )}
+        />
       </Switch>
     </div>
   </Router>
