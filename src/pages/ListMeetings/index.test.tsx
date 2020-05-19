@@ -8,34 +8,40 @@ const renderComponent = (props: Partial<ComponentProps<typeof ListMeetings>>) =>
 
 const mockMeetings: Meeting[] = [
   {
-    title: 'first q&a',
-    maxCandidateQuestionCount: 50,
-    maxCandidateQuestionPerUserCount: 3,
-    maxVotePerUserCount: 2,
+    id: '77374755-234c-4a9a-92df-4c301fd69c97',
+    title: 'first QnA',
+    conditions: {
+      winnerCount: 10,
+      maxCandidateQuestionCount: 50,
+      maxCandidateQuestionPerUserCount: 3,
+      maxVotePerUserCount: 2,
+    },
     electionEndDate: new Date(),
-    winnerCount: 10,
     plannedAnswerDate: new Date(),
     questions: [],
   },
   {
-    title: 'second q&a',
-    maxCandidateQuestionCount: 50,
-    maxCandidateQuestionPerUserCount: 3,
-    maxVotePerUserCount: 2,
+    id: '44eff65b-495d-4564-8d96-6481afcf57d6',
+    title: 'second QnA',
+    conditions: {
+      winnerCount: 10,
+      maxCandidateQuestionCount: 50,
+      maxCandidateQuestionPerUserCount: 3,
+      maxVotePerUserCount: 2,
+    },
     electionEndDate: new Date(),
-    winnerCount: 10,
     plannedAnswerDate: new Date(),
     questions: [],
   },
 ]
 
 describe('<ListMeetings />', () => {
-  it('should have 0 meetings if getMeetings is not given', async () => {
+  it('should have 0 meetings if getMeetings returns empty list', async () => {
     const getMeetingsSpy = jest.fn().mockResolvedValue([])
     const { container } = renderComponent({ getMeetings: getMeetingsSpy })
     const meetings = container.querySelector('.list-meetings__meetings')
 
-    expect(meetings).not.toBe(null)
+    expect(getMeetingsSpy).toHaveBeenCalledTimes(1)
     await waitFor(() => expect(meetings!.querySelectorAll('li').length).toBe(0))
   })
 
@@ -45,7 +51,6 @@ describe('<ListMeetings />', () => {
     const meetings = container.querySelector('.list-meetings__meetings')
 
     expect(getMeetingsSpy).toHaveBeenCalledTimes(1)
-    expect(meetings).not.toBe(null)
     await waitFor(() => expect(meetings!.querySelectorAll('li').length).toBe(2))
   })
 })

@@ -1,11 +1,11 @@
 import React, { FC } from 'react'
 import './index.scss'
-import Header from '../Header'
+import Navbar from '../Navbar'
 
 const MainLayout: FC = ({ children }) => (
   <div className="main">
-    <div className="main__header">
-      <Header />
+    <div className="main__navbar">
+      <Navbar />
     </div>
     <div className="main__body">{children}</div>
   </div>

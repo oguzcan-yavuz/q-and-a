@@ -140,10 +140,12 @@ describe('<CreateMeeting />', () => {
     expect(onSaveSpy).toHaveBeenCalledWith(
       expect.objectContaining({
         title: 'some title',
-        maxCandidateQuestionCount: 3,
-        winnerCount: 1,
-        maxVotePerUserCount: 2,
-        maxCandidateQuestionPerUserCount: 7,
+        conditions: {
+          maxCandidateQuestionCount: 3,
+          winnerCount: 1,
+          maxVotePerUserCount: 2,
+          maxCandidateQuestionPerUserCount: 7,
+        },
         electionEndDate: date,
         plannedAnswerDate: date,
       })

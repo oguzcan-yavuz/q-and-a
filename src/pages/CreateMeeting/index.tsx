@@ -3,11 +3,11 @@ import TextInput from '../../components/Inputs/TextInput'
 import NumberInput from '../../components/Inputs/NumberInput'
 import DateTimeInput from '../../components/Inputs/DateTimeInput'
 import { withLogic } from '../../utilities/with-logic'
-import { Meeting } from '../../types'
+import { MeetingBody } from '../../types'
 
 type SaveProps = {
   loading: boolean
-  onSave(data: Meeting): void
+  onSave(data: MeetingBody): void
 }
 
 type Props = SaveProps
@@ -16,7 +16,6 @@ const SaveLogic = (): SaveProps => {
   const [loading, setLoading] = useState(false)
 
   const onSave: SaveProps['onSave'] = async (data) => {
-    console.log('on save data:', data)
     setLoading(true)
     // TODO: call the meeting service
     setLoading(false)
@@ -88,10 +87,12 @@ const CreateMeeting: FC<Props> = ({ loading, onSave }) => {
           onClick={() =>
             onSave({
               title,
-              maxCandidateQuestionCount,
-              winnerCount,
-              maxVotePerUserCount,
-              maxCandidateQuestionPerUserCount,
+              conditions: {
+                maxCandidateQuestionCount,
+                winnerCount,
+                maxVotePerUserCount,
+                maxCandidateQuestionPerUserCount,
+              },
               electionEndDate,
               plannedAnswerDate,
             })
