@@ -1,4 +1,4 @@
-import * as R from 'ramda'
+import { curry } from 'ramda'
 
 export const appendTwoDotsAndSpace = (str: string): string => `${str}: `
 
@@ -9,7 +9,7 @@ export const toLocalISOTime = (date: Date): string => {
   return localISOTime
 }
 
-export const resolveURL = R.curry((base: string, paths?: string[]): string => {
+export const resolveURL = curry((base: string, paths?: string[]): string => {
   // TODO: trim the / at the start and end?
   const pathArray = paths || []
 

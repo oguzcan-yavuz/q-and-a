@@ -1,5 +1,3 @@
-import { T } from 'ramda'
-
 type Question = {
   value: string
 }

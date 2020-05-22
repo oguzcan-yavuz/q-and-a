@@ -3,21 +3,23 @@ import TextInput from '../../components/Inputs/TextInput'
 import NumberInput from '../../components/Inputs/NumberInput'
 import DateTimeInput from '../../components/Inputs/DateTimeInput'
 import { withLogic } from '../../utilities/with-logic'
-import { MeetingBody } from '../../types'
+import { Meeting, Body } from '../../types'
+import { useServices } from '../../services/context'
 
 type SaveProps = {
   loading: boolean
-  onSave(data: MeetingBody): void
+  onSave(data: Body<Meeting>): void
 }
 
 type Props = SaveProps
 
 const SaveLogic = (): SaveProps => {
+  const { meetingService } = useServices()
   const [loading, setLoading] = useState(false)
 
   const onSave: SaveProps['onSave'] = async (data) => {
     setLoading(true)
-    // TODO: call the meeting service
+    await meetingService.create(data)
     setLoading(false)
   }
 
