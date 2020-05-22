@@ -13,14 +13,8 @@ type Props = GetMeetingsProps
 const GetMeetingsLogic = (): GetMeetingsProps => {
   const { meetingService } = useServices()
 
-  const getMeetings: GetMeetingsProps['getMeetings'] = async (query) => {
-    const meetings = await meetingService.getMany(query)
-
-    return meetings
-  }
-
   return {
-    getMeetings,
+    getMeetings: meetingService.getMany,
   }
 }
 

@@ -13,33 +13,33 @@ export class CrudHTTPClient<T> {
     this.URLResolver = resolveURL(this.resourceURL)
   }
 
-  public async getById(id: string): Promise<T> {
+  public getById = async (id: string): Promise<T> => {
     const url = this.URLResolver([id])
     const { data }: AxiosResponse<T> = await axios.get(url)
 
     return data
   }
 
-  public async getMany({ filters, pagination, sort }: Query<T>): Promise<T[]> {
+  public getMany = async ({ filters, pagination, sort }: Query<T>): Promise<T[]> => {
     const params = mergeAll([filters || {}, pagination || {}, sort || {}])
     const { data }: AxiosResponse<T[]> = await axios.get(this.resourceURL, { params })
 
     return data
   }
 
-  public async create(payload: Body<T>): Promise<Id> {
+  public create = async (payload: Body<T>): Promise<Id> => {
     const { data }: AxiosResponse<Id> = await axios.post(this.resourceURL, payload)
 
     return data
   }
 
-  public async updateById(id: string, payload: Partial<T>): Promise<void> {
+  public updateById = async (id: string, payload: Partial<T>): Promise<void> => {
     const url = this.URLResolver([id])
 
     await axios.patch(url, payload)
   }
 
-  public async deleteById(id: string): Promise<void> {
+  public deleteById = async (id: string): Promise<void> => {
     const url = this.URLResolver([id])
 
     await axios.delete(url)

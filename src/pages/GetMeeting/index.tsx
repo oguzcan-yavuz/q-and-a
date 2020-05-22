@@ -16,14 +16,8 @@ type Props = Params & GetMeetingProps
 const GetMeetingLogic = (): GetMeetingProps => {
   const { meetingService } = useServices()
 
-  const getMeeting: GetMeetingProps['getMeeting'] = async (id) => {
-    const meeting = await meetingService.getById(id)
-
-    return meeting
-  }
-
   return {
-    getMeeting,
+    getMeeting: meetingService.getById,
   }
 }
 
