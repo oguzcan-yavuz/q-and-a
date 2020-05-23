@@ -13,6 +13,7 @@ type SaveProps = {
 
 type Props = SaveProps
 
+// TODO: add tests for logic functions
 const SaveLogic = (): SaveProps => {
   const { meetingService } = useServices()
   const [loading, setLoading] = useState(false)
