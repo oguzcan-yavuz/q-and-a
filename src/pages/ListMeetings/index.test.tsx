@@ -40,18 +40,20 @@ describe('<ListMeetings />', () => {
   it('should have 0 meetings if getMeetings returns empty list', async () => {
     const getMeetingsSpy = jest.fn().mockResolvedValue([])
     const { container } = renderComponent({ getMeetings: getMeetingsSpy })
-    const meetings = container.querySelector('.list-meetings__meetings')
+    const meetings = container.querySelector('.list-meetings')
 
     expect(getMeetingsSpy).toHaveBeenCalledTimes(1)
-    await waitFor(() => expect(meetings!.querySelectorAll('li').length).toBe(0))
+    await waitFor(() => expect(meetings!.querySelectorAll('Card').length).toBe(0))
   })
 
   it('should have two meetings', async () => {
     const getMeetingsSpy = jest.fn().mockResolvedValue(mockMeetings)
     const { container } = renderComponent({ getMeetings: getMeetingsSpy })
-    const meetings = container.querySelector('.list-meetings__meetings')
+    const meetings = container.querySelector('.list-meetings')
 
     expect(getMeetingsSpy).toHaveBeenCalledTimes(1)
-    await waitFor(() => expect(meetings!.querySelectorAll('li').length).toBe(2))
+    await waitFor(() =>
+      expect(meetings!.querySelectorAll('.list-meetings__meeting').length).toBe(2)
+    )
   })
 })

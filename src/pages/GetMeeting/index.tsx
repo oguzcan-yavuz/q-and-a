@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react'
-import { Meeting } from '../../types'
+import { Meeting, Id } from '../../types'
 import { withLogic } from '../../utilities/with-logic'
 import { useServices } from '../../services/context'
 
@@ -7,11 +7,7 @@ type GetMeetingProps = {
   getMeeting(id: string): Promise<Meeting>
 }
 
-type Params = {
-  id: string
-}
-
-type Props = Params & GetMeetingProps
+type Props = Id & GetMeetingProps
 
 const GetMeetingLogic = (): GetMeetingProps => {
   const { meetingService } = useServices()

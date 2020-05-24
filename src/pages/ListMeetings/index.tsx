@@ -3,6 +3,7 @@ import { withLogic } from '../../utilities/with-logic'
 import { Meeting, Query } from '../../types'
 import { Link } from 'react-router-dom'
 import { useServices } from '../../services/context'
+import { Card, Button } from 'react-bootstrap'
 
 type GetMeetingsProps = {
   getMeetings(query: Query<Meeting>): Promise<Meeting[]>
@@ -29,17 +30,25 @@ const ListMeetings: FC<Props> = ({ getMeetings }) => {
 
   return (
     <div className="list-meetings">
-      <h2>Active Q&A Sessions</h2>
-      <ul className="list-meetings__meetings">
-        {meetings.map(({ id, title }) => (
-          <li key={id} onClick={() => setCurrentMeetingId(id)}>
-            {title}
-          </li>
-        ))}
-      </ul>
-      <Link to={`/meetings/${currentMeetingId}`} className="badge badge-warning">
-        Details
-      </Link>
+      {meetings.map(({ id, title }) => (
+        <Card
+          key={id}
+          className="list-meetings__meeting mb-5"
+          onMouseOver={() => setCurrentMeetingId(id)}
+        >
+          <Card.Img variant="top" src="holder.js/100px180" />
+          <Card.Body>
+            <Card.Title>{title}</Card.Title>
+            <Card.Text>
+              Some quick example text to build on the card title and make up the bulk of the card's
+              content.
+            </Card.Text>
+            <Link to={`/meetings/${currentMeetingId}`}>
+              <Button variant="primary">Details</Button>
+            </Link>
+          </Card.Body>
+        </Card>
+      ))}
     </div>
   )
 }
