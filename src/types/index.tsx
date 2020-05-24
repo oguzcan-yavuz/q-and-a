@@ -5,6 +5,7 @@ type Question = {
 export type Meeting = {
   id: string
   title: string
+  image?: string
   conditions: {
     maxCandidateQuestionCount: number
     winnerCount: number

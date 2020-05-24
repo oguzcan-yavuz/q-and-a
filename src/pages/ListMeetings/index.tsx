@@ -30,13 +30,15 @@ const ListMeetings: FC<Props> = ({ getMeetings }) => {
 
   return (
     <div className="list-meetings">
-      {meetings.map(({ id, title }) => (
+      {meetings.map(({ id, title, image }) => (
         <Card
           key={id}
           className="list-meetings__meeting mb-5"
           onMouseOver={() => setCurrentMeetingId(id)}
         >
-          <Card.Img variant="top" src="holder.js/100px180" />
+          <div className="embed-responsive embed-responsive-4by3">
+            <Card.Img className="embed-responsive-item" variant="top" src={image} />
+          </div>
           <Card.Body>
             <Card.Title>{title}</Card.Title>
             <Card.Text>
