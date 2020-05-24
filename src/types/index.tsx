@@ -2,16 +2,18 @@ type Question = {
   value: string
 }
 
+export type Conditions = {
+  maxCandidateQuestionCount: number
+  winnerCount: number
+  maxVotePerUserCount: number
+  maxCandidateQuestionPerUserCount: number
+}
+
 export type Meeting = {
   id: string
   title: string
   image?: string
-  conditions: {
-    maxCandidateQuestionCount: number
-    winnerCount: number
-    maxVotePerUserCount: number
-    maxCandidateQuestionPerUserCount: number
-  }
+  conditions: Conditions
   electionEndDate: Date
   plannedAnswerDate: Date
   questions?: Question[]

@@ -1,19 +1,32 @@
 import React, { FC } from 'react'
-import { appendTwoDotsAndSpace } from '../../../utilities'
+import { Form } from 'react-bootstrap'
 
 type Props = {
+  name: string
+  placeholder: string
   value: string
   label: string
+  required: boolean
   onChange(text: string): void
 }
 
-const TextInput: FC<Props> = ({ value, label, onChange }) => (
-  <div>
-    <label>
-      {appendTwoDotsAndSpace(label)}
-      <input type="text" value={value} onChange={(e) => onChange(e.target.value)} />
-    </label>
-  </div>
+const TextInput: FC<Props> = ({ name, placeholder, value, label, onChange, required }) => (
+  <Form.Group>
+    {label && (
+      <Form.Label as="label" htmlFor={name}>
+        {label} {required && '(*)'}
+      </Form.Label>
+    )}
+    <Form.Control
+      id={name}
+      className="form-control"
+      name={name}
+      placeholder={placeholder}
+      value={value}
+      required={required}
+      onChange={(e) => onChange(e.target.value)}
+    />
+  </Form.Group>
 )
 
 export default TextInput

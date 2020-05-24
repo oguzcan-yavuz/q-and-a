@@ -1,10 +1,11 @@
-import React, { useState, FC } from 'react'
+import React, { useState, FC, FormEvent } from 'react'
 import TextInput from '../../components/Inputs/TextInput'
 import NumberInput from '../../components/Inputs/NumberInput'
 import DateTimeInput from '../../components/Inputs/DateTimeInput'
 import { withLogic } from '../../utilities/with-logic'
 import { Meeting, Body } from '../../types'
 import { useServices } from '../../services/context'
+import { Form, Button } from 'react-bootstrap'
 
 type SaveProps = {
   loading: boolean
@@ -49,44 +50,82 @@ const CreateMeeting: FC<Props> = ({ loading, onSave }) => {
     setPlannedAnswerDate(new Date())
   }
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+  }
   return (
-    <div>
+    <Form onSubmit={handleSubmit}>
       <div className="create-meeting__inputs">
-        <TextInput value={title} label="Type your title" onChange={setTitle} />
+        <TextInput
+          name="title"
+          placeholder="title"
+          required={true}
+          value={title}
+          label="Type your title"
+          onChange={setTitle}
+        />
         <NumberInput
+          name="maxCandidateQuestionCount"
           value={maxCandidateQuestionCount}
           label="Maximum number of candidate questions"
+          placeholder="Maximum number of candidate questions"
           onChange={setMaxCandidateQuestionCount}
+          min="0"
+          max="10"
+          required={true}
         />
         <NumberInput
+          name="winnerCount"
           value={winnerCount}
           label="Number of questions you will answer"
+          placeholder="Number of questions you will answer"
           onChange={setWinnerCount}
+          min="0"
+          max="50"
+          required={true}
         />
         <NumberInput
+          name="maxVotePerUserCount"
           value={maxVotePerUserCount}
           label="Maximum number of votes a user have"
+          placeholder="Maximum number of votes a user have"
           onChange={setMaxVotePerUserCount}
+          min="0"
+          max="50"
+          required={true}
         />
         <NumberInput
+          name="maxCandidateQuestionPerUserCount"
           value={maxCandidateQuestionPerUserCount}
           label="Maximum number of questions a user can send"
+          placeholder="Maximum number of questions a user can send"
           onChange={setMaxCandidateQuestionPerUserCount}
+          min="0"
+          max="50"
+          required={true}
         />
         <DateTimeInput
+          name="electionEndDate"
           value={electionEndDate}
           label="End date of the question submissions"
+          placeholder="End date of the question submissions"
           onChange={setElectionEndDate}
+          required={true}
         />
         <DateTimeInput
+          name="plannedAnswerDate"
           value={plannedAnswerDate}
           label="When you will answer the questions"
+          placeholder="When you will answer the questions"
           onChange={setPlannedAnswerDate}
+          required={true}
         />
       </div>
       <div>
-        <button
+        <Button
+          type="submit"
           disabled={loading}
+          variant="success"
           onClick={() =>
             onSave({
               title,
@@ -102,12 +141,12 @@ const CreateMeeting: FC<Props> = ({ loading, onSave }) => {
           }
         >
           Save
-        </button>
-        <button disabled={loading} onClick={reset}>
+        </Button>
+        <Button type="reset" disabled={loading} variant="primary" onClick={reset}>
           Reset
-        </button>
+        </Button>
       </div>
-    </div>
+    </Form>
   )
 }
 

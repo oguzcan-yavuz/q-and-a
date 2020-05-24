@@ -1,24 +1,44 @@
 import React, { FC } from 'react'
-import { appendTwoDotsAndSpace } from '../../../utilities'
+import { Form } from 'react-bootstrap'
 
 type Props = {
+  name: string
+  required: boolean
+  placeholder: string
+  min: string
+  max: string
   value: number
   label: string
   onChange(n: number): void
 }
 
-const NumberInput: FC<Props> = ({ value, label, onChange }) => (
-  <div>
-    <label>
-      {appendTwoDotsAndSpace(label)}
-      <input
-        type="number"
-        value={value.toString()}
-        onChange={(e) => onChange(parseInt(e.target.value, 10))}
-        min="0"
-      />
-    </label>
-  </div>
+const NumberInput: FC<Props> = ({
+  name,
+  min,
+  max,
+  placeholder,
+  value,
+  label,
+  onChange,
+  required,
+}) => (
+  <Form.Group>
+    {label && (
+      <Form.Label htmlFor={name}>
+        {label} {required && '(*)'}
+      </Form.Label>
+    )}
+    <Form.Control
+      id={name}
+      name={name}
+      value={value.toString()}
+      placeholder={placeholder}
+      min={min}
+      max={max}
+      required={required}
+      onChange={(e) => onChange(parseInt(e.target.value, 10))}
+    />
+  </Form.Group>
 )
 
 export default NumberInput

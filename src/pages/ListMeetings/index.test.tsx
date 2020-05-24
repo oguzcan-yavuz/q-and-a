@@ -43,7 +43,9 @@ describe('<ListMeetings />', () => {
     const meetings = container.querySelector('.list-meetings')
 
     expect(getMeetingsSpy).toHaveBeenCalledTimes(1)
-    await waitFor(() => expect(meetings!.querySelectorAll('Card').length).toBe(0))
+    await waitFor(() =>
+      expect(meetings!.querySelectorAll('.list-meetings__meeting').length).toBe(0)
+    )
   })
 
   it('should have two meetings', async () => {
