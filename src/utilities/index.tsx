@@ -2,12 +2,17 @@ import { curry } from 'ramda'
 
 export const appendTwoDotsAndSpace = (str: string): string => `${str}: `
 
-export const toLocalISOTime = (date: Date): string => {
-  const tzOffset = new Date().getTimezoneOffset() * 60000
-  const localISOTime = new Date(date.getTime() - tzOffset).toISOString().slice(0, -1)
-
-  return localISOTime
-}
+export const datePreciseToMinutes = (date: Date): Date =>
+  new Date(
+    Date.UTC(
+      date.getUTCFullYear(),
+      date.getUTCMonth(),
+      date.getUTCDate(),
+      date.getUTCHours(),
+      date.getUTCMinutes(),
+      0
+    )
+  )
 
 export const resolveURL = curry((base: string, paths?: string[]): string => {
   // TODO: trim the / at the start and end?

@@ -9,7 +9,7 @@ type Props = {
   max: string
   value: number
   label: string
-  onChange(n: number): void
+  handleChange(n: number): void
 }
 
 const NumberInput: FC<Props> = ({
@@ -19,7 +19,7 @@ const NumberInput: FC<Props> = ({
   placeholder,
   value,
   label,
-  onChange,
+  handleChange,
   required,
 }) => (
   <Form.Group>
@@ -36,7 +36,7 @@ const NumberInput: FC<Props> = ({
       min={min}
       max={max}
       required={required}
-      onChange={(e) => onChange(parseInt(e.target.value, 10))}
+      onChange={(e) => handleChange(parseInt(e.target.value, 10))}
     />
   </Form.Group>
 )

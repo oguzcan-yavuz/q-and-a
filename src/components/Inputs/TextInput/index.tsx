@@ -7,10 +7,10 @@ type Props = {
   value: string
   label: string
   required: boolean
-  onChange(text: string): void
+  handleChange(text: string): void
 }
 
-const TextInput: FC<Props> = ({ name, placeholder, value, label, onChange, required }) => (
+const TextInput: FC<Props> = ({ name, placeholder, value, label, handleChange, required }) => (
   <Form.Group>
     {label && (
       <Form.Label as="label" htmlFor={name}>
@@ -24,7 +24,7 @@ const TextInput: FC<Props> = ({ name, placeholder, value, label, onChange, requi
       placeholder={placeholder}
       value={value}
       required={required}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={(e) => handleChange(e.target.value)}
     />
   </Form.Group>
 )

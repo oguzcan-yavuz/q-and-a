@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
-import { toLocalISOTime } from '../../../utilities'
 import { Form } from 'react-bootstrap'
+import DatePicker from 'react-datepicker'
 
 type Props = {
   value: Date
@@ -8,23 +8,25 @@ type Props = {
   label: string
   placeholder: string
   required: boolean
-  onChange(date: Date): void
+  handleChange(date: Date): void
 }
 
-const DateTimeInput: FC<Props> = ({ name, value, label, placeholder, onChange, required }) => (
+const DateTimeInput: FC<Props> = ({ name, value, label, placeholder, handleChange, required }) => (
   <Form.Group>
     {label && (
       <Form.Label htmlFor={name}>
         {label} {required && '(*)'}
       </Form.Label>
     )}
-    <Form.Control
+    <DatePicker
       id={name}
       name={name}
-      type="datetime-local"
-      value={toLocalISOTime(value)}
-      placeholder={placeholder}
-      onChange={(e) => onChange(new Date(e.target.value))}
+      selected={value}
+      showTimeSelect={true}
+      timeFormat="p"
+      dateFormat="Pp"
+      placeholderText={placeholder}
+      onChange={(e) => handleChange(e || new Date())}
       required={required}
     />
   </Form.Group>

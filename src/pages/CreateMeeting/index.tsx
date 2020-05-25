@@ -62,14 +62,14 @@ const CreateMeeting: FC<Props> = ({ loading, onSave }) => {
           required={true}
           value={title}
           label="Type your title"
-          onChange={setTitle}
+          handleChange={setTitle}
         />
         <NumberInput
           name="maxCandidateQuestionCount"
           value={maxCandidateQuestionCount}
           label="Maximum number of candidate questions"
           placeholder="Maximum number of candidate questions"
-          onChange={setMaxCandidateQuestionCount}
+          handleChange={setMaxCandidateQuestionCount}
           min="0"
           max="10"
           required={true}
@@ -79,7 +79,7 @@ const CreateMeeting: FC<Props> = ({ loading, onSave }) => {
           value={winnerCount}
           label="Number of questions you will answer"
           placeholder="Number of questions you will answer"
-          onChange={setWinnerCount}
+          handleChange={setWinnerCount}
           min="0"
           max="50"
           required={true}
@@ -89,7 +89,7 @@ const CreateMeeting: FC<Props> = ({ loading, onSave }) => {
           value={maxVotePerUserCount}
           label="Maximum number of votes a user have"
           placeholder="Maximum number of votes a user have"
-          onChange={setMaxVotePerUserCount}
+          handleChange={setMaxVotePerUserCount}
           min="0"
           max="50"
           required={true}
@@ -99,7 +99,7 @@ const CreateMeeting: FC<Props> = ({ loading, onSave }) => {
           value={maxCandidateQuestionPerUserCount}
           label="Maximum number of questions a user can send"
           placeholder="Maximum number of questions a user can send"
-          onChange={setMaxCandidateQuestionPerUserCount}
+          handleChange={setMaxCandidateQuestionPerUserCount}
           min="0"
           max="50"
           required={true}
@@ -109,7 +109,7 @@ const CreateMeeting: FC<Props> = ({ loading, onSave }) => {
           value={electionEndDate}
           label="End date of the question submissions"
           placeholder="End date of the question submissions"
-          onChange={setElectionEndDate}
+          handleChange={setElectionEndDate}
           required={true}
         />
         <DateTimeInput
@@ -117,7 +117,7 @@ const CreateMeeting: FC<Props> = ({ loading, onSave }) => {
           value={plannedAnswerDate}
           label="When you will answer the questions"
           placeholder="When you will answer the questions"
-          onChange={setPlannedAnswerDate}
+          handleChange={setPlannedAnswerDate}
           required={true}
         />
       </div>

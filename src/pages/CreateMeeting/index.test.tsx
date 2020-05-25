@@ -1,9 +1,9 @@
 import React, { ComponentProps } from 'react'
 import { fireEvent, render } from '@testing-library/react'
-import { advanceTo, clear } from 'jest-date-mock'
+import { advanceTo, advanceBy, clear } from 'jest-date-mock'
 import CreateMeeting from './index'
-import { toLocalISOTime } from '../../utilities'
 import { MemoryRouter } from 'react-router-dom'
+import { datePreciseToMinutes } from '../../utilities'
 
 const renderComponent = (props: Partial<ComponentProps<typeof CreateMeeting>>) =>
   render(<CreateMeeting {...(props as any)} />, { wrapper: MemoryRouter })
@@ -59,27 +59,34 @@ describe('<CreateMeeting />', () => {
   it('should change electionEndDate', async () => {
     const { getByLabelText } = renderComponent({})
     const electionEndDate = getByLabelText(/End date of the question submissions/) as any
-    const localDate = toLocalISOTime(new Date())
+    const localDate = new Date()
 
     fireEvent.change(electionEndDate!, { target: { value: localDate } })
+    const componentDate = new Date(electionEndDate!.value)
 
-    expect(electionEndDate!.value).toBe(localDate)
+    expect(componentDate.getUTCFullYear()).toBe(localDate.getUTCFullYear())
+    expect(componentDate.getUTCMonth()).toBe(localDate.getUTCMonth())
+    expect(componentDate.getUTCDate()).toBe(localDate.getUTCDate())
+    expect(componentDate.getUTCHours()).toBe(localDate.getUTCHours())
+    expect(componentDate.getUTCMinutes()).toBe(localDate.getUTCMinutes())
   })
 
   it('should change plannedAnswerDate', async () => {
     const { getByLabelText } = renderComponent({})
     const plannedAnswerDate = getByLabelText(/When you will answer the questions/) as any
-    const localDate = toLocalISOTime(new Date())
+    const localDate = new Date()
 
     fireEvent.change(plannedAnswerDate!, { target: { value: localDate } })
+    const componentDate = new Date(plannedAnswerDate!.value)
 
-    expect(plannedAnswerDate!.value).toBe(localDate)
+    expect(componentDate.getUTCFullYear()).toBe(localDate.getUTCFullYear())
+    expect(componentDate.getUTCMonth()).toBe(localDate.getUTCMonth())
+    expect(componentDate.getUTCDate()).toBe(localDate.getUTCDate())
+    expect(componentDate.getUTCHours()).toBe(localDate.getUTCHours())
+    expect(componentDate.getUTCMinutes()).toBe(localDate.getUTCMinutes())
   })
 
   it('should reset', () => {
-    advanceTo(new Date())
-    const mockNow = new Date()
-    const mockNowLocal = toLocalISOTime(mockNow)
     const { getByLabelText, getByText } = renderComponent({})
     const title = getByLabelText(/title/i) as any
     const maxCandidateQuestionCount = getByLabelText(/Maximum number of candidate questions/) as any
@@ -90,7 +97,11 @@ describe('<CreateMeeting />', () => {
     ) as any
     const electionEndDate = getByLabelText(/End date of the question submissions/) as any
     const plannedAnswerDate = getByLabelText(/When you will answer the questions/) as any
-    const localDate = toLocalISOTime(new Date())
+    advanceTo(new Date())
+    const mockNow = datePreciseToMinutes(new Date())
+    const threeMinutesInMS = 1000 * 60 * 3
+    advanceBy(threeMinutesInMS)
+    const localDate = new Date()
     const resetButton = getByText(/reset/i)
 
     fireEvent.change(title!, { target: { value: 'some title' } })
@@ -100,15 +111,20 @@ describe('<CreateMeeting />', () => {
     fireEvent.change(maxCandidateQuestionPerUserCount!, { target: { value: '7' } })
     fireEvent.change(electionEndDate!, { target: { value: localDate } })
     fireEvent.change(plannedAnswerDate!, { target: { value: localDate } })
+
+    advanceBy(-threeMinutesInMS)
     fireEvent.click(resetButton!)
+
+    const updatedElectionEndDate = new Date(electionEndDate!.value)
+    const updatedPlannedAnswerDate = new Date(plannedAnswerDate!.value)
 
     expect(title!.value).toEqual('')
     expect(maxCandidateQuestionCount!.value).toEqual('0')
     expect(winnerCount!.value).toEqual('0')
     expect(maxVotePerUserCount!.value).toEqual('0')
     expect(maxCandidateQuestionPerUserCount!.value).toEqual('0')
-    expect(electionEndDate!.value).toEqual(mockNowLocal)
-    expect(electionEndDate!.value).toEqual(mockNowLocal)
+    expect(updatedElectionEndDate).toEqual(mockNow)
+    expect(updatedPlannedAnswerDate).toEqual(mockNow)
     clear()
   })
 
@@ -125,8 +141,8 @@ describe('<CreateMeeting />', () => {
     ) as any
     const electionEndDate = getByLabelText(/End date of the question submissions/) as any
     const plannedAnswerDate = getByLabelText(/When you will answer the questions/) as any
-    const localDate = toLocalISOTime(new Date())
-    const date = new Date(localDate)
+    const localDate = new Date()
+    const dateWithoutSeconds = datePreciseToMinutes(localDate)
     const saveButton = getByText(/save/i)
 
     fireEvent.change(title!, { target: { value: 'some title' } })
@@ -134,8 +150,8 @@ describe('<CreateMeeting />', () => {
     fireEvent.change(winnerCount!, { target: { value: '1' } })
     fireEvent.change(maxVotePerUserCount!, { target: { value: '2' } })
     fireEvent.change(maxCandidateQuestionPerUserCount!, { target: { value: '7' } })
-    fireEvent.change(electionEndDate!, { target: { value: localDate } })
-    fireEvent.change(plannedAnswerDate!, { target: { value: localDate } })
+    fireEvent.change(electionEndDate!, { target: { value: dateWithoutSeconds } })
+    fireEvent.change(plannedAnswerDate!, { target: { value: dateWithoutSeconds } })
     fireEvent.click(saveButton!)
 
     expect(onSaveSpy).toHaveBeenCalledWith(
@@ -147,8 +163,8 @@ describe('<CreateMeeting />', () => {
           maxVotePerUserCount: 2,
           maxCandidateQuestionPerUserCount: 7,
         },
-        electionEndDate: date,
-        plannedAnswerDate: date,
+        electionEndDate: dateWithoutSeconds,
+        plannedAnswerDate: dateWithoutSeconds,
       })
     )
   })
