@@ -1,5 +1,5 @@
 import React, { ComponentProps } from 'react'
-import { fireEvent, render } from '@testing-library/react'
+import { fireEvent, render, waitFor } from '@testing-library/react'
 import { advanceTo, advanceBy, clear } from 'jest-date-mock'
 import CreateMeeting from './index'
 import { MemoryRouter } from 'react-router-dom'
@@ -154,18 +154,20 @@ describe('<CreateMeeting />', () => {
     fireEvent.change(plannedAnswerDate!, { target: { value: dateWithoutSeconds } })
     fireEvent.click(saveButton!)
 
-    expect(onSaveSpy).toHaveBeenCalledWith(
-      expect.objectContaining({
-        title: 'some title',
-        conditions: {
-          maxCandidateQuestionCount: 3,
-          winnerCount: 1,
-          maxVotePerUserCount: 2,
-          maxCandidateQuestionPerUserCount: 7,
-        },
-        electionEndDate: dateWithoutSeconds,
-        plannedAnswerDate: dateWithoutSeconds,
-      })
+    await waitFor(() =>
+      expect(onSaveSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          title: 'some title',
+          conditions: {
+            maxCandidateQuestionCount: 3,
+            winnerCount: 1,
+            maxVotePerUserCount: 2,
+            maxCandidateQuestionPerUserCount: 7,
+          },
+          electionEndDate: dateWithoutSeconds,
+          plannedAnswerDate: dateWithoutSeconds,
+        })
+      )
     )
   })
 })

@@ -6,6 +6,7 @@ import { withLogic } from '../../utilities/with-logic'
 import { Meeting, Body } from '../../types'
 import { useServices } from '../../services/context'
 import { Form, Button } from 'react-bootstrap'
+import { Redirect } from 'react-router-dom'
 
 type SaveProps = {
   loading: boolean
@@ -39,6 +40,7 @@ const CreateMeeting: FC<Props> = ({ loading, onSave }) => {
   const [maxCandidateQuestionPerUserCount, setMaxCandidateQuestionPerUserCount] = useState(0)
   const [electionEndDate, setElectionEndDate] = useState(new Date())
   const [plannedAnswerDate, setPlannedAnswerDate] = useState(new Date())
+  const [redirect, setRedirect] = useState(false)
 
   const reset = () => {
     setTitle('')
@@ -50,10 +52,32 @@ const CreateMeeting: FC<Props> = ({ loading, onSave }) => {
     setPlannedAnswerDate(new Date())
   }
 
-  const handleSubmit = (e: FormEvent) => {
+  // TODO: this should redirect to the profile page of the user?
+  // TODO: instead of `redirect` state maybe a state with three options can be used for: not submitted, submit fail and submit success
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
+    const meeting = {
+      title,
+      conditions: {
+        maxCandidateQuestionCount,
+        winnerCount,
+        maxVotePerUserCount,
+        maxCandidateQuestionPerUserCount,
+      },
+      electionEndDate,
+      plannedAnswerDate,
+    }
+    try {
+      await onSave(meeting)
+      setRedirect(true)
+    } catch (err) {
+      alert(err)
+    }
   }
-  return (
+
+  return redirect ? (
+    <Redirect to="/meetings" />
+  ) : (
     <Form onSubmit={handleSubmit}>
       <div className="create-meeting__inputs">
         <TextInput
@@ -122,24 +146,7 @@ const CreateMeeting: FC<Props> = ({ loading, onSave }) => {
         />
       </div>
       <div>
-        <Button
-          type="submit"
-          disabled={loading}
-          variant="success"
-          onClick={() =>
-            onSave({
-              title,
-              conditions: {
-                maxCandidateQuestionCount,
-                winnerCount,
-                maxVotePerUserCount,
-                maxCandidateQuestionPerUserCount,
-              },
-              electionEndDate,
-              plannedAnswerDate,
-            })
-          }
-        >
+        <Button type="submit" disabled={loading} variant="success">
           Save
         </Button>
         <Button type="reset" disabled={loading} variant="primary" onClick={reset}>

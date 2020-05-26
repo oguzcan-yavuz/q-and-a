@@ -1,7 +1,5 @@
 import { curry } from 'ramda'
 
-export const appendTwoDotsAndSpace = (str: string): string => `${str}: `
-
 export const datePreciseToMinutes = (date: Date): Date =>
   new Date(
     Date.UTC(
