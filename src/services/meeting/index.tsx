@@ -1,7 +1,9 @@
 import { Meeting } from '../../types'
-import { CrudHTTPClient } from '../crud-http-client'
+import { CrudHTTPClient, CrudHTTPClientInterface } from '../crud-http-client'
 
-export class MeetingService extends CrudHTTPClient<Meeting> {
+export interface MeetingServiceInterface extends CrudHTTPClientInterface<Meeting> {}
+
+export class MeetingService extends CrudHTTPClient<Meeting> implements MeetingServiceInterface {
   constructor() {
     const path = 'meetings'
     super(path)

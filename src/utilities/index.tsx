@@ -1,4 +1,4 @@
-import { curry } from 'ramda'
+import { curry, defaultTo } from 'ramda'
 
 export const datePreciseToMinutes = (date: Date): Date =>
   new Date(
@@ -18,3 +18,5 @@ export const resolveURL = curry((base: string, paths?: string[]): string => {
 
   return [base, ...pathArray].join('/')
 })
+
+export const defaultToEmptyObject = defaultTo({})

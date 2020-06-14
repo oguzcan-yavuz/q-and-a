@@ -1,9 +1,21 @@
 import axios, { AxiosResponse } from 'axios'
-import { resolveURL } from '../utilities'
+import { resolveURL, defaultToEmptyObject } from '../utilities'
 import { Body, Id, Query } from '../types'
-import { mergeAll } from 'ramda'
+import { mergeAll, map } from 'ramda'
 
-export class CrudHTTPClient<T> {
+export interface CrudHTTPClientInterface<T> {
+  getById(id: string): Promise<T>
+
+  getMany({ filters, pagination, sort }: Query<T>): Promise<T[]>
+
+  create(payload: Body<T>): Promise<Id>
+
+  updateById(id: string, payload: Partial<T>): Promise<void>
+
+  deleteById(id: string): Promise<void>
+}
+
+export class CrudHTTPClient<T> implements CrudHTTPClientInterface<T> {
   private baseURL: string = 'https://5ec452aa628c160016e70f78.mockapi.io'
   protected resourceURL: string
   protected URLResolver: (paths?: string[]) => string
@@ -21,7 +33,7 @@ export class CrudHTTPClient<T> {
   }
 
   public getMany = async ({ filters, pagination, sort }: Query<T>): Promise<T[]> => {
-    const params = mergeAll([filters || {}, pagination || {}, sort || {}])
+    const params = mergeAll(map(defaultToEmptyObject, [filters, pagination, sort]))
     const { data }: AxiosResponse<T[]> = await axios.get(this.resourceURL, { params })
 
     return data
