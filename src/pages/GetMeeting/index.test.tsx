@@ -4,7 +4,7 @@ import { useGetMeeting, GetMeetingPresenter, useDeleteMeeting } from './index'
 import { Meeting } from '../../types'
 import { renderHook } from '@testing-library/react-hooks'
 import { ServiceProvider } from '../../services/context'
-import { mock, when, instance, verify } from 'ts-mockito'
+import { mock, when, instance, verify, reset } from 'ts-mockito'
 import { ServicesInterface } from '../../services'
 import { MeetingServiceInterface } from '../../services/meeting'
 
@@ -26,17 +26,26 @@ const mockMeeting: Meeting = {
 }
 
 describe('<GetMeeting />', () => {
+  let mockMeetingService: MeetingServiceInterface
+  let mockServices: ServicesInterface
+
+  beforeEach(() => {
+    mockMeetingService = mock<MeetingServiceInterface>()
+    mockServices = {
+      meetingService: instance(mockMeetingService),
+    }
+  })
+
+  afterEach(() => {
+    reset(mockMeetingService)
+  })
+
   describe('useGetMeeting', () => {
     it('should return the meeting', async () => {
-      const mockMeetingService = mock<MeetingServiceInterface>()
       when(mockMeetingService.getById(mockMeeting.id)).thenResolve(mockMeeting)
-      const mockMeetingServiceInstance = instance(mockMeetingService)
-      const mockServices = mock<ServicesInterface>()
-      when(mockServices.meetingService).thenReturn(mockMeetingServiceInstance)
-      const mockServicesInstance = instance(mockServices)
 
       const wrapper = ({ children }: any) => (
-        <ServiceProvider services={mockServicesInstance} children={children} />
+        <ServiceProvider services={mockServices} children={children} />
       )
 
       const { result, waitForNextUpdate } = renderHook(() => useGetMeeting(mockMeeting.id), {
@@ -54,7 +63,7 @@ describe('<GetMeeting />', () => {
   })
 
   describe('useDeleteMeeting', () => {
-    it('should return the handleDelete function', async () => {
+    it('should return the handleDelete function', () => {
       const {
         result: {
           current: { handleDelete },
