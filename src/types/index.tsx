@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react'
+
 type Question = {
   value: string
 }
@@ -41,3 +43,5 @@ export type Query<T> = {
   pagination?: Pagination
   sort?: Sort<Body<T>>
 }
+
+export type Dispatcher<S> = Dispatch<SetStateAction<S>>

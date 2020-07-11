@@ -1,44 +1,29 @@
-import React, { FC } from 'react'
+import React, { forwardRef } from 'react'
 import { Form } from 'react-bootstrap'
 
 type Props = {
   name: string
-  required: boolean
-  placeholder: string
-  min: string
-  max: string
-  value: number
-  label: string
-  handleChange(n: number): void
+  placeholder?: string
+  label?: string
 }
 
-const NumberInput: FC<Props> = ({
-  name,
-  min,
-  max,
-  placeholder,
-  value,
-  label,
-  handleChange,
-  required,
-}) => (
+const NumberInput = forwardRef<HTMLInputElement, Props>(({ name, placeholder, label }, ref) => (
   <Form.Group>
     {label && (
-      <Form.Label htmlFor={name}>
-        {label} {required && '(*)'}
+      <Form.Label as="label" htmlFor={name}>
+        {label}
       </Form.Label>
     )}
     <Form.Control
+      type="number"
+      ref={ref}
       id={name}
+      className="form-control"
       name={name}
-      value={value.toString()}
       placeholder={placeholder}
-      min={min}
-      max={max}
-      required={required}
-      onChange={(e) => handleChange(parseInt(e.target.value, 10))}
+      defaultValue="0"
     />
   </Form.Group>
-)
+))
 
 export default NumberInput

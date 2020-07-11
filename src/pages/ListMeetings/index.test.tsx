@@ -1,11 +1,16 @@
-import React, { ComponentProps } from 'react'
-import { render, waitFor } from '@testing-library/react'
-import ListMeetings from './index'
-import { Meeting } from '../../types'
-import { MemoryRouter } from 'react-router-dom'
+import React, { ComponentProps, FC } from 'react'
+import { render, waitFor, fireEvent } from '@testing-library/react'
+import { ListMeetingsPresenter, useGetMeetings, useCurrentMeeting } from './index'
+import { Meeting, Dispatcher } from '../../types'
+import { MeetingServiceInterface } from '../../services/meeting'
+import { ServicesInterface } from '../../services'
+import { mock, when, verify, instance, reset, deepEqual } from 'ts-mockito'
+import { ServiceProvider } from '../../services/context'
+import { renderHook } from '@testing-library/react-hooks'
 
-const renderComponent = (props: Partial<ComponentProps<typeof ListMeetings>>) =>
-  render(<ListMeetings {...(props as any)} />, { wrapper: MemoryRouter })
+const renderListMeetingsPresenter = (
+  props: Partial<ComponentProps<typeof ListMeetingsPresenter>>
+) => render(<ListMeetingsPresenter {...(props as any)} />)
 
 const mockMeetings: Meeting[] = [
   {
@@ -37,25 +42,107 @@ const mockMeetings: Meeting[] = [
 ]
 
 describe('<ListMeetings />', () => {
-  it('should have 0 meetings if getMeetings returns empty list', async () => {
-    const getMeetingsSpy = jest.fn().mockResolvedValue([])
-    const { container } = renderComponent({ getMeetings: getMeetingsSpy })
-    const meetings = container.querySelector('.list-meetings')
+  let mockMeetingService: MeetingServiceInterface
+  let mockServices: ServicesInterface
+  let mockServicesWrapper: FC
+  let mockSetCurrentMeetingId: Dispatcher<string>
+  let mockLinkToMeetingWrapper: FC
 
-    expect(getMeetingsSpy).toHaveBeenCalledTimes(1)
-    await waitFor(() =>
-      expect(meetings!.querySelectorAll('.list-meetings__meeting').length).toBe(0)
+  beforeEach(() => {
+    mockMeetingService = mock<MeetingServiceInterface>()
+    mockServices = {
+      meetingService: instance(mockMeetingService),
+    }
+    mockServicesWrapper = ({ children }) => (
+      <ServiceProvider services={mockServices} children={children} />
     )
+    mockSetCurrentMeetingId = jest.fn()
+    mockLinkToMeetingWrapper = jest.fn().mockImplementation(({ children }) => <div>{children}</div>)
   })
 
-  it('should have two meetings', async () => {
-    const getMeetingsSpy = jest.fn().mockResolvedValue(mockMeetings)
-    const { container } = renderComponent({ getMeetings: getMeetingsSpy })
-    const meetings = container.querySelector('.list-meetings')
+  afterEach(() => {
+    reset(mockMeetingService)
+    jest.clearAllMocks()
+  })
 
-    expect(getMeetingsSpy).toHaveBeenCalledTimes(1)
-    await waitFor(() =>
-      expect(meetings!.querySelectorAll('.list-meetings__meeting').length).toBe(2)
-    )
+  describe('useGetMeetings', () => {
+    it('should return the meeting', async () => {
+      when(mockMeetingService.getMany(deepEqual({}))).thenResolve(mockMeetings)
+
+      const { result, waitForNextUpdate } = renderHook(() => useGetMeetings(), {
+        wrapper: mockServicesWrapper,
+      })
+
+      await waitForNextUpdate()
+      const {
+        current: { meetings },
+      } = result
+
+      verify(mockMeetingService.getMany(deepEqual({}))).once()
+      expect(meetings).toEqual(mockMeetings)
+    })
+  })
+
+  describe('useCurrentMeeting', () => {
+    it('should return the props', () => {
+      const {
+        result: {
+          current: { setCurrentMeetingId, LinkToMeetingWrapper },
+        },
+      } = renderHook(() => useCurrentMeeting())
+
+      expect(setCurrentMeetingId).toBeInstanceOf(Function)
+      expect(LinkToMeetingWrapper).toBeInstanceOf(Function)
+    })
+  })
+
+  describe('ListMeetingsPresenter', () => {
+    it('should have 0 meetings if meetings is empty', async () => {
+      const { container } = renderListMeetingsPresenter({ meetings: [] })
+      const meetings = container.querySelector('.list-meetings')
+
+      await waitFor(() =>
+        expect(meetings!.querySelectorAll('.list-meetings__meeting').length).toBe(0)
+      )
+    })
+
+    it('should have two meetings', async () => {
+      const { container } = renderListMeetingsPresenter({
+        meetings: mockMeetings,
+        setCurrentMeetingId: mockSetCurrentMeetingId,
+        LinkToMeetingWrapper: mockLinkToMeetingWrapper,
+      })
+      const meetings = container.querySelector('.list-meetings')
+
+      await waitFor(() =>
+        expect(meetings!.querySelectorAll('.list-meetings__meeting').length).toBe(
+          mockMeetings.length
+        )
+      )
+    })
+
+    it('should set current meeting id on hover', () => {
+      const { getByText } = renderListMeetingsPresenter({
+        meetings: mockMeetings,
+        setCurrentMeetingId: mockSetCurrentMeetingId,
+        LinkToMeetingWrapper: mockLinkToMeetingWrapper,
+      })
+      const firstMeeting = getByText(mockMeetings[0].title)
+
+      fireEvent.mouseOver(firstMeeting)
+
+      expect(mockSetCurrentMeetingId).toBeCalledTimes(1)
+      expect(mockSetCurrentMeetingId).toHaveBeenCalledWith(mockMeetings[0].id)
+    })
+
+    it('should render LinkToMeetingWrapper', () => {
+      renderListMeetingsPresenter({
+        meetings: mockMeetings,
+        setCurrentMeetingId: mockSetCurrentMeetingId,
+        LinkToMeetingWrapper: mockLinkToMeetingWrapper,
+      })
+
+      expect(mockLinkToMeetingWrapper).toHaveBeenCalledTimes(mockMeetings.length)
+    })
   })
 })

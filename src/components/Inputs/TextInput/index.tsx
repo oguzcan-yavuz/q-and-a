@@ -1,32 +1,27 @@
-import React, { FC } from 'react'
+import React, { forwardRef } from 'react'
 import { Form } from 'react-bootstrap'
 
 type Props = {
   name: string
-  placeholder: string
-  value: string
-  label: string
-  required: boolean
-  handleChange(text: string): void
+  placeholder?: string
+  label?: string
 }
 
-const TextInput: FC<Props> = ({ name, placeholder, value, label, handleChange, required }) => (
+const TextInput = forwardRef<HTMLInputElement, Props>(({ name, placeholder, label }, ref) => (
   <Form.Group>
     {label && (
       <Form.Label as="label" htmlFor={name}>
-        {label} {required && '(*)'}
+        {label}
       </Form.Label>
     )}
     <Form.Control
+      ref={ref}
       id={name}
       className="form-control"
       name={name}
       placeholder={placeholder}
-      value={value}
-      required={required}
-      onChange={(e) => handleChange(e.target.value)}
     />
   </Form.Group>
-)
+))
 
 export default TextInput

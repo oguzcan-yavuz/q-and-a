@@ -1,4 +1,4 @@
-import React, { ComponentProps } from 'react'
+import React, { FC, ComponentProps } from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import { useGetMeeting, GetMeetingPresenter, useDeleteMeeting } from './index'
 import { Meeting } from '../../types'
@@ -28,12 +28,16 @@ const mockMeeting: Meeting = {
 describe('<GetMeeting />', () => {
   let mockMeetingService: MeetingServiceInterface
   let mockServices: ServicesInterface
+  let mockServicesWrapper: FC
 
   beforeEach(() => {
     mockMeetingService = mock<MeetingServiceInterface>()
     mockServices = {
       meetingService: instance(mockMeetingService),
     }
+    mockServicesWrapper = ({ children }) => (
+      <ServiceProvider services={mockServices} children={children} />
+    )
   })
 
   afterEach(() => {
@@ -44,12 +48,8 @@ describe('<GetMeeting />', () => {
     it('should return the meeting', async () => {
       when(mockMeetingService.getById(mockMeeting.id)).thenResolve(mockMeeting)
 
-      const wrapper = ({ children }: any) => (
-        <ServiceProvider services={mockServices} children={children} />
-      )
-
       const { result, waitForNextUpdate } = renderHook(() => useGetMeeting(mockMeeting.id), {
-        wrapper,
+        wrapper: mockServicesWrapper,
       })
 
       await waitForNextUpdate()
